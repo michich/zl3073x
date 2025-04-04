@@ -2594,12 +2594,13 @@ zl3073x_dpll_probe(struct platform_device *pdev)
 
 	rc = zl3073x_dpll_init_worker(zldpll);
 	if (rc)
-		return rc;
+		return rc; // XXX dpll_unregister pins and dpll ?
 
 	platform_set_drvdata(pdev, zldpll);
 
 	/* Initial firmware fine phase correction */
 	rc = zl3073x_dpll_init_fine_phase_adjust(zldpll);
+	// XXX if (rc) stop the kworker, dpll_unregister pins and dpll ?
 
 	return rc;
 }
