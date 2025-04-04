@@ -203,11 +203,12 @@ int zl3073x_write_##_name(struct zl3073x_dev *zldev, unsigned int idx,	\
  *          0: success
  */
 #define READ_SLEEP_US	10
-#define READ_TIMEOUT_US	100000000
+#define READ_TIMEOUT_US	100000000 // XXX does it have to be that long?
 #define zl3073x_wait_clear_bits(_zldev, _reg, _bits, _index...)		\
 	({								\
 	 zl3073x_##_reg##_t __val;					\
 	 int __rc;							\
+	 /* XXX Why _atomic? All callers are in sleepable context */    \
 	 if (read_poll_timeout_atomic(zl3073x_read_##_reg, __rc,	\
 				      __rc || !((_bits) & __val),	\
 				      READ_SLEEP_US, READ_TIMEOUT_US,   \
